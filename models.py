@@ -44,9 +44,9 @@ class WeldingMaterial(models.Model):
 	price = models.FloatField(blank=True,null=True)
 
 class WeldingMaterialTechnology(models.Model):
-	baking_temperature = models.IntegerField(blank=True,null=True,blank=True,null=True)
-	preservationg_time = models.IntegerField(blank=True,null=True,blank=True,null=True)
-	size = models.CharField(max_length=50,blank=True,null=True,blank=True,null=True)
+	baking_temperature = models.IntegerField(blank=True,null=True)
+	preservationg_time = models.IntegerField(blank=True,null=True)
+	size = models.CharField(max_length=50,blank=True,null=True)
 	weldingmaterial = models.ForeignKey(WeldingMaterial, on_delete=models.CASCADE,blank=True,null=True)
 
 class Auxiliary(models.Model):
@@ -62,7 +62,7 @@ class WeldingMachine(models.Model):
 	name = models.CharField(max_length=50,blank=True,null=True)
 	specifications = models.CharField(max_length=50,blank=True,null=True)
 	service_life = models.IntegerField(blank=True,null=True)
-	storage_time = models.models.DateTimeField(blank=True,null=True)
+	storage_time = models.DateTimeField(blank=True,null=True)
 	price = models.FloatField(blank=True,null=True)
 
 class BaseMetal(models.Model):
@@ -111,11 +111,8 @@ class WPS(models.Model):
 	mark = models.TextField(blank=True,null=True)
 
 class WeldConditionParameter(models.Model):
-	current_polarity_category = (
-        ('N', 'DCEN'),
-        ('P', 'DCEP'),
-    )
-    wps = models.ForeignKey(WPS,on_delete=models.CASCADE,blank=True,null=True)
+	current_polarity_category = (('N', 'DCEN'),('P', 'DCEP'),)
+	wps = models.ForeignKey(WPS,on_delete=models.CASCADE,blank=True,null=True)
 	welding_sequence = models.IntegerField(blank=True,null=True)
 	layer = models.IntegerField(blank=True,null=True)
 	path = models.IntegerField(blank=True,null=True)
@@ -140,7 +137,7 @@ class WeldArtwork(models.Model):
         ('b', 'butt joint'),
         ('f', 'fillet joint'),
     )
-    layer_pass_type_category = (
+	layer_pass_type_category = (
         ('A', '1-1'),
         ('B', '1-1,2-1'),
         ('C', '1-1,2-2'),
@@ -186,7 +183,7 @@ class WeldingTask(models.Model):
 	wps = models.ForeignKey(WPS,on_delete=models.CASCADE,blank=True,null=True)
 	expected_welding_time = models.DateTimeField(blank=True,null=True)
 	start_time_of_actual_welding = models.DateTimeField(blank=True,null=True)
-	duration_time = IntegerField(blank=True,null=True)
+	duration_time = models.IntegerField(blank=True,null=True)
 	wps_deviation = models.CharField(max_length=100,blank=True,null=True)
 	corrective_measures = models.TextField(blank=True,null=True)
 	detection_result_of_tensile_properties = models.FloatField(blank=True,null=True)
@@ -206,8 +203,8 @@ class ActualWeldingData(models.Model):
 	prediction_of_tensile_properties = models.FloatField(blank=True,null=True)
 	prediction_of_fatigue_strength = models.FloatField(blank=True,null=True)
 	prediction_of_bending_strength = models.FloatField(blank=True,null=True)
-	pore = models.BooleanField(blank=True,null=True)
-	slag = models.BooleanField(blank=True,null=True)
+	pore = models.NullBooleanField(blank=True)
+	slag = models.NullBooleanField(blank=True)
 	prediction_of_frontal_melt_width = models.FloatField(blank=True,null=True)
 	prediction_of_back_melt_width = models.FloatField(blank=True,null=True)
 
