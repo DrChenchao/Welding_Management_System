@@ -98,8 +98,6 @@ class WPS(models.Model):
         ('D', 'Intermediate Welder'),
         ('E', 'Primary Welder'),
     )
-	A_base_metal = models.ForeignKey(ABaseMetal,on_delete=models.CASCADE,blank=True,null=True)
-	B_base_metal = models.ForeignKey(BBaseMetal,on_delete=models.CASCADE,blank=True,null=True)
 	defect_detecting = models.CharField(max_length=100,blank=True,null=True)
 	groove_clean_method = models.CharField(max_length=100,blank=True,null=True)
 	weld_root_clean_method = models.CharField(max_length=100,blank=True,null=True)
@@ -161,24 +159,21 @@ class WeldArtwork(models.Model):
 	relative_position = models.CharField(max_length=1, choices=relative_position_category,blank=True,null=True)
 	top_layer_pass_type= models.CharField(max_length=1, choices=layer_pass_type_category,blank=True,null=True)
 	bottom_layer_pass_type= models.CharField(max_length=1, choices=layer_pass_type_category,blank=True,null=True)
+	A_base_metal = models.ForeignKey(ABaseMetal,on_delete=models.CASCADE,blank=True,null=True)
+	B_base_metal = models.ForeignKey(BBaseMetal,on_delete=models.CASCADE,blank=True,null=True)
 
-class MechanicalPropertiesOfWelds(models.Model):
-	category = (
-        ('O', 'ordinary'),
-        ('S', 'strong'),
-        ('E', 'extremely strong'),
-    )
-	mpwid = models.OneToOneField(WPS,on_delete=models.CASCADE,primary_key=True,)
-	tensile_properties = models.CharField(max_length=1, choices=category,blank=True,null=True)
-	bending_strength = models.CharField(max_length=1, choices=category,blank=True,null=True)
-	impact_toughness = models.CharField(max_length=1, choices=category,blank=True,null=True)
-	fatigue_strength = models.CharField(max_length=1, choices=category,blank=True,null=True)
-	heat_resistant_crack = models.CharField(max_length=1, choices=category,blank=True,null=True)
-	corrosion_resistance = models.CharField(max_length=1, choices=category,blank=True,null=True)
-	hardness = models.CharField(max_length=1, choices=category,blank=True,null=True)
-	anti_lamellar_tearing = models.CharField(max_length=1, choices=category,blank=True,null=True)
+class WeldingProject(models.Model):
+	workshop_sketch = models.ImageField(upload_to='WeldingProject/')
+	description = models.TextField(blank=True,null=True)
+
+class TaskArrangementLocation(models.Model):
+	x_coordinates = models.FloatField(blank=True,null=True)
+	y_coordinates = models.FloatField(blank=True,null=True)
+	description = models.TextField(blank=True,null=True)
+	weldingproject = models.ForeignKey(WeldingProject,on_delete=models.CASCADE,blank=True,null=True)
 
 class WeldingTask(models.Model):
+	taskarrangementlocation = models.ForeignKey(TaskArrangementLocation,on_delete=models.CASCADE,blank=True,null=True)
 	welder = models.ForeignKey(Welder,on_delete=models.CASCADE,blank=True,null=True)
 	wps = models.ForeignKey(WPS,on_delete=models.CASCADE,blank=True,null=True)
 	expected_welding_time = models.DateTimeField(blank=True,null=True)
@@ -192,6 +187,22 @@ class WeldingTask(models.Model):
 	detection_result_of_frontal_melted_width = models.FloatField(blank=True,null=True)
 	detection_result_of_back_melted_width = models.FloatField(blank=True,null=True)
 	detection_result_of_penetration_depths = models.CharField(max_length=10)
+
+class MechanicalPropertiesOfWelds(models.Model):
+	category = (
+        ('O', 'ordinary'),
+        ('S', 'strong'),
+        ('E', 'extremely strong'),
+    )
+	mpwid = models.OneToOneField(WeldingTask,on_delete=models.CASCADE,primary_key=True,)
+	tensile_properties = models.CharField(max_length=1, choices=category,blank=True,null=True)
+	bending_strength = models.CharField(max_length=1, choices=category,blank=True,null=True)
+	impact_toughness = models.CharField(max_length=1, choices=category,blank=True,null=True)
+	fatigue_strength = models.CharField(max_length=1, choices=category,blank=True,null=True)
+	heat_resistant_crack = models.CharField(max_length=1, choices=category,blank=True,null=True)
+	corrosion_resistance = models.CharField(max_length=1, choices=category,blank=True,null=True)
+	hardness = models.CharField(max_length=1, choices=category,blank=True,null=True)
+	anti_lamellar_tearing = models.CharField(max_length=1, choices=category,blank=True,null=True)
 
 class ActualWeldingData(models.Model):
 	welding_task = models.ForeignKey(WeldingTask,on_delete=models.CASCADE,blank=True,null=True)
@@ -208,13 +219,3 @@ class ActualWeldingData(models.Model):
 	prediction_of_frontal_melt_width = models.FloatField(blank=True,null=True)
 	prediction_of_back_melt_width = models.FloatField(blank=True,null=True)
 
-class WeldingProject(models.Model):
-	workshop_sketch = models.ImageField(upload_to='WeldingProject/')
-	description = models.TextField(blank=True,null=True)
-
-class TaskArrangementLocation(models.Model):
-	welding_task = models.ForeignKey(WeldingTask,on_delete=models.CASCADE,blank=True,null=True)
-	x_coordinates = models.FloatField(blank=True,null=True)
-	y_coordinates = models.FloatField(blank=True,null=True)
-	description = models.TextField(blank=True,null=True)
-	weldingproject = models.ForeignKey(WeldingProject,on_delete=models.CASCADE,blank=True,null=True)
