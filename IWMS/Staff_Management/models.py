@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 # Create your models here.
 class Department(models.Model):
 	name = models.CharField(max_length=20)
@@ -13,11 +13,11 @@ class Staff(models.Model):
         ('M', 'Male'),
         ('F', 'Female'),
     )
-	name = models.CharField(max_length=20)
+	user = models.OneToOneField(User,blank=True,null=True,on_delete=models.CASCADE,)
 	post = models.ForeignKey(DepartmentPost,on_delete=models.CASCADE,)
 	working_address = models.CharField(max_length=100)
 	home_address = models.CharField(max_length=100,blank=True,null=True)
-	emile = models.EmailField(max_length=254)
+	#emile = models.EmailField(max_length=254)
 	telephone_number = models.CharField(max_length=20)
 	id_number = models.CharField(max_length=20)
 	nationality = models.CharField(max_length=10)
@@ -25,6 +25,8 @@ class Staff(models.Model):
 	birth_date = models.DateTimeField()
 	Photo = models.ImageField(upload_to='Staff/',blank=True)
 	performance = models.DecimalField(max_digits=5, decimal_places=2,blank=True,null=True)
+	def __str__(self):
+		return self.user.username
 
 class Welder(models.Model):
 	qualification_category = (
