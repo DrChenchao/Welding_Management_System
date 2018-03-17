@@ -7,6 +7,10 @@ class Department(models.Model):
 class DepartmentPost(models.Model):
 	department_id = models.ForeignKey(Department,on_delete=models.CASCADE,)
 	department_post_name = models.CharField(max_length=30)
+	access_right_1 = models.BooleanField(blank=True,default=False)
+	access_right_2 = models.BooleanField(blank=True,default=False)
+	access_right_3 = models.BooleanField(blank=True,default=False)
+	access_right_4 = models.BooleanField(blank=True,default=False)
 
 class Staff(models.Model):
 	gender_category = (

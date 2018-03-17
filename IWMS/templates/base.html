@@ -278,9 +278,12 @@
                         <li>
                             <a href="{% url 'User_Information:usercenter' %}"><i class="fa fa-user fa-fw"></i> 用户信息中心</a>
                         </li>
+                        {% if user.is_authenticated %}
                         <li>
                             <a href="{% url 'Staff_Management:staff_management' %}"><i class="fa fa-group fa-fw"></i> 员工管理</a>
                         </li>
+                        {% endif %}
+                        {% if user.is_authenticated %}
                         <li>
                             <a href="#"><i class="fa fa-table fa-fw"></i>焊材管理<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
@@ -302,12 +305,17 @@
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
+                        {% endif %}
+                        {% if user.is_authenticated %}
                         <li>
                             <a href="{% url 'WPS_Management:wps_management' %}"><i class="fa fa-won fa-fw"></i>焊接工艺规程</a>
                         </li>
+                        {% endif %}
+                        {% if user.is_authenticated %}
                         <li>
                             <a href="{% url 'Project_Management:project_management' %}"><i class="fa fa-rub fa-fw"></i>焊接项目管理</a>
                         </li>
+                        {% endif %}
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->
