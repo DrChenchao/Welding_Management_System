@@ -6,5 +6,5 @@ app_name = 'User_Information'
 urlpatterns = [
     url(r'^person_center/$', views.person_center,name='person_center'),
     url(r'^setting/$', views.setting,name='setting'),
-    url(r'^usercenter/$', views.usercenter,name='usercenter'),
+    url(r'', views.usercenter,name='usercenter'),
 ]

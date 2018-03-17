@@ -24,9 +24,9 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'', include('INDEX.urls')),
     url(r'^User_Information/', include('User_Information.urls')),
-	url(r'^Project_Management', include('Project_Management.urls')),
-    url(r'^Staff_Management', include('Staff_Management.urls')),
-    url(r'^WPS_Management', include('WPS_Management.urls')),
+	url(r'^Project_Management/', include('Project_Management.urls')),
+    url(r'^Staff_Management/', include('Staff_Management.urls')),
+    url(r'^WPS_Management/', include('WPS_Management.urls')),
     url(r'^accounts/', include('registration.backends.simple.urls')),
 	url(r'^Material_Management/',include('Material_Management.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

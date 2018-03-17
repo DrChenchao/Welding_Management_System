@@ -158,4 +158,4 @@ REGISTRATION_AUTO_LOGIN = True
 LOGIN_REDIRECT_URL = '/User_Information/'
 # The page users are directed to if they are not logged in,
 # and are trying to access pages requiring authentication
-LOGIN_URL = '/accounts/login/'
+LOGIN_URL = 'auth_login'
