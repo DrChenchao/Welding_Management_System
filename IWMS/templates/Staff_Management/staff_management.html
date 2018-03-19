@@ -2,13 +2,326 @@
 {% load staticfiles %}
 {% block title %}auxilary_material{% endblock %}
 {% block css %}
-    <!-- 本网页包含的特定css -->
+<!-- 本网页包含的特定css -->
+<!-- DataTables CSS -->
+<link href="{% static 'BASE/datatables/css/dataTables.bootstrap.css' %}" rel="stylesheet">
+
+<!-- DataTables Responsive CSS -->
+<link href="{% static 'BASE/datatables-responsive/dataTables.responsive.css' %}" rel="stylesheet">
+
+<!-- Libraries CSS Files -->
+<link href="{% static 'css/SM/animate.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/SM/ionicons.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/SM/assets/owl.carousel.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/SM/lightbox.min.css' %}" rel="stylesheet">
+<!-- Main Stylesheet File -->
+<link href="{% static 'css/SM/style.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-    <h1>本页面要求包含员工部门、职位、焊工信息</h1>
-    <!-- 本网页内容 -->
+<section id="portfolio"  class="section-bg"  >
+	<div class="container" >
+
+		<header class="section-header">
+			<h3 class="section-title">部门架构及人员组成</h3>
+		</header>
+
+		<div class="row">
+			<div class="col-lg-12">
+				<ul id="portfolio-flters">
+					<div id="department_li">
+						<li id="all" data-filter="*" class="filter-active">All</li>
+						{% for department in departments %}
+							<li id="{{ department.name }}" data-filter="{{ department.name }}" >{{ department.name }}</li>
+	                    {% empty %}
+	                        <li>None</li>
+	                    {% endfor %}
+					</div>
+                    <div>
+	                    <button id="department_create">Create</button>
+	                    <button id="department_edit">Edit</button>
+	                    <button id="department_delete">Delete</button>
+	                	<button id="department_Save">Save</button>
+	                    <button id="department_Cancel">Cancel</button>
+                	</div>
+				</ul>
+				
+			</div>
+		</div>
+
+		<!-- <div class="row portfolio-container">
+
+			<div class="col-lg-4 col-md-6 portfolio-item filter-app wow fadeInUp">
+				<div class="portfolio-wrap">
+					<figure>
+						<img src="img/portfolio/app1.jpg" class="img-fluid" alt="">
+						<a href="img/portfolio/app1.jpg" data-lightbox="portfolio" data-title="部门1" class="link-preview" title="Preview"><i class="ion ion-eye"></i></a>
+						<a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
+					</figure>
+
+					<div class="portfolio-info">
+						<h4><a href="#">岗位1</a></h4>
+						<p>部门1</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-lg-4 col-md-6 portfolio-item filter-app wow fadeInUp" data-wow-delay="0.1s">
+				<div class="portfolio-wrap">
+					<figure>
+						<img src="img/portfolio/app2.jpg" class="img-fluid" alt="">
+						<a href="img/portfolio/app2.jpg" class="link-preview" data-lightbox="portfolio" data-title="部门1" title="Preview"><i class="ion ion-eye"></i></a>
+						<a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
+					</figure>
+
+					<div class="portfolio-info">
+						<h4><a href="#">岗位2</a></h4>
+						<p>部门1</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-lg-4 col-md-6 portfolio-item filter-app wow fadeInUp" data-wow-delay="0.2s">
+				<div class="portfolio-wrap">
+					<figure>
+						<img src="img/portfolio/app3.jpg" class="img-fluid" alt="">
+						<a href="img/portfolio/app3.jpg" class="link-preview" data-lightbox="portfolio" data-title="部门1" title="Preview"><i class="ion ion-eye"></i></a>
+						<a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
+					</figure>
+
+					<div class="portfolio-info">
+						<h4><a href="#">岗位3</a></h4>
+						<p>部门1</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-lg-4 col-md-6 portfolio-item filter-card wow fadeInUp">
+				<div class="portfolio-wrap">
+					<figure>
+						<img src="img/portfolio/card1.jpg" class="img-fluid" alt="">
+						<a href="img/portfolio/card1.jpg" class="link-preview" data-lightbox="portfolio" data-title="部门2" title="Preview"><i class="ion ion-eye"></i></a>
+						<a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
+					</figure>
+
+					<div class="portfolio-info">
+						<h4><a href="#">岗位4</a></h4>
+						<p>部门2</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-lg-4 col-md-6 portfolio-item filter-card wow fadeInUp" data-wow-delay="0.1s">
+				<div class="portfolio-wrap">
+					<figure>
+						<img src="img/portfolio/card2.jpg" class="img-fluid" alt="">
+						<a href="img/portfolio/card2.jpg" class="link-preview" data-lightbox="portfolio" data-title="部门2" title="Preview"><i class="ion ion-eye"></i></a>
+						<a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
+					</figure>
+
+					<div class="portfolio-info">
+						<h4><a href="#">岗位5</a></h4>
+						<p>部门2</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-lg-4 col-md-6 portfolio-item filter-card wow fadeInUp" data-wow-delay="0.2s">
+				<div class="portfolio-wrap">
+					<figure>
+						<img src="img/portfolio/card3.jpg" class="img-fluid" alt="">
+						<a href="img/portfolio/card3.jpg" class="link-preview" data-lightbox="portfolio" data-title="部门2" title="Preview"><i class="ion ion-eye"></i></a>
+						<a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
+					</figure>
+
+					<div class="portfolio-info">
+						<h4><a href="#">岗位6</a></h4>
+						<p>部门2</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-lg-4 col-md-6 portfolio-item filter-web wow fadeInUp">
+				<div class="portfolio-wrap">
+					<figure>
+						<img src="img/portfolio/web1.jpg" class="img-fluid" alt="">
+						<a href="img/portfolio/web1.jpg" class="link-preview" data-lightbox="portfolio" data-title="部门3" title="Preview"><i class="ion ion-eye"></i></a>
+						<a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
+					</figure>
+
+					<div class="portfolio-info">
+						<h4><a href="#">岗位7</a></h4>
+						<p>部门3</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-lg-4 col-md-6 portfolio-item filter-web wow fadeInUp" data-wow-delay="0.1s">
+				<div class="portfolio-wrap">
+					<figure>
+						<img src="img/portfolio/web2.jpg" class="img-fluid" alt="">
+						<a href="img/portfolio/web2.jpg" class="link-preview" data-lightbox="portfolio" data-title="部门3" title="Preview"><i class="ion ion-eye"></i></a>
+						<a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
+					</figure>
+
+					<div class="portfolio-info">
+						<h4><a href="#">岗位8</a></h4>
+						<p>部门3</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-lg-4 col-md-6 portfolio-item filter-web wow fadeInUp" data-wow-delay="0.2s">
+				<div class="portfolio-wrap">
+					<figure>
+						<img src="img/portfolio/web3.jpg" class="img-fluid" alt="">
+						<a href="img/portfolio/web3.jpg" class="link-preview" data-lightbox="portfolio" data-title="部门3" title="Preview"><i class="ion ion-eye"></i></a>
+						<a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
+					</figure>
+
+					<div class="portfolio-info">
+						<h4><a href="#">岗位9</a></h4>
+						<p>部门3</p>
+					</div>
+				</div>
+			</div> -->
+
+		</div>
+
+	</div>
+</section><!-- #portfolio -->
+<!-- 本网页内容 -->
 {% endblock %}
 {% block script %}
-    <!-- 本网页包含的特定JavaScript -->
+<!-- 本网页包含的特定JavaScript -->
+<script src="{% static 'js/SM/jquery-migrate.min.js' %}"></script>
+<!-- <script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>-->
+<!-- <script src="lib/easing/easing.min.js"></script> -->
+<!-- <script src="lib/superfish/hoverIntent.js"></script> -->
+<script src="{% static 'js/SM/superfish.min.js' %}"></script>
+<script src="{% static 'js/SM/wow.min.js' %}"></script>
+<script src="{% static 'js/SM/waypoints.min.js' %}"></script>
+<script src="{% static 'js/SM/counterup.min.js' %}"></script>
+<!-- <script src="lib/owlcarousel/owl.carousel.min.js"></script> -->
+<script src="{% static 'js/SM/isotope.pkgd.min.js' %}"></script>
+<script src="{% static 'js/SM/lightbox.min.js' %}"></script>
+<script src="{% static 'js/SM/jquery.touchSwipe.min.js' %}"></script>
+<!-- Contact Form JavaScript File -->
+<script src="{% static 'js/SM/contactform.js' %}"></script>
+
+<!-- Template Main Javascript File -->
+<script src="{% static 'js/SM/main.js' %}"></script>
+<script src="{% static 'js/SM/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/SM/dataTables.bootstrap.min.js' %}"></script>
+<script src="{% static 'js/SM/dataTables.responsive.js' %}"></script>
+<script>
+	$(document).ready(function(){
+		function modify_operation() {
+			$("#department_Save").hide();
+			$("#department_Cancel").hide();
+			$("#department_create").show();
+			$("#department_edit").show();
+			$("#department_delete").show();
+		}
+		function ensure_operation() {
+			$("#department_Save").show();
+			$("#department_Cancel").show();
+			$("#department_create").hide();
+			$("#department_edit").hide();
+			$("#department_delete").hide();
+		}
+		var department_create = false;
+		var department_edit = false;
+		var department_delete = false;
+		var ID = "";
+		var old_content="";
+		$("#department_create").click(function(){
+			var input = document.createElement('input');
+			input.setAttribute('type', 'text');
+			input.setAttribute('size', 10);
+			var li = document.createElement('li');
+			li.setAttribute('id', 'create_department');
+			li.setAttribute('data-filter', 'create_department');
+			li.append(input);
+			$("#department_li").append(li);
+			ensure_operation();
+			ID = "create_department";
+			department_create = true;
+		});
+		$("#department_edit").click(function(){
+			var id = $(".filter-active").attr("id");
+			if(id != "all")
+			{
+				old_content = $(".filter-active").text();
+				var input = document.createElement('input');
+				input.setAttribute('type', 'text');
+				input.setAttribute('size', 10);
+				var value = $(".filter-active").text();
+				input.setAttribute('value', value);
+				$("#"+id).html(input);
+				ensure_operation();
+				ID = id;
+				department_edit = true;
+			}
+		});
+		$("#department_delete").click(function(){
+			var id = $(".filter-active").attr("id");
+			if(id != "all")
+			{
+				old_content = $(".filter-active").text();
+				$("#"+id).remove();
+				ensure_operation();
+				ID = id;
+				department_delete = true;
+			}
+		});
+		$("#department_Save").click(function(){
+			if(department_create)
+			{
+				var department_name;
+				department_name = $("#"+ ID).children("input").val();
+				$.get("{% url 'Staff_Management:department_creat' %}", {name: department_name}, function(data){
+					$("#"+ID).remove();
+					var li = document.createElement('li');
+					li.setAttribute('id', data);
+					li.setAttribute('data-filter', data);
+					li.append(data);
+					$("#department_li").append(li);
+					ID = "";
+				})
+			}
+			if(department_edit)
+			{
+				var department_name;
+				department_name = $("#"+ ID).children("input").val();
+				$.get("{% url 'Staff_Management:department_edit' %}", {name: department_name, old_content: old_content}, function(data){
+					$("#"+ID).empty();
+					$("#"+ID).append(data);
+					$("#"+ID).setAttribute('id', data);
+					ID = "";
+				})
+			}
+			if(department_delete)
+			{
+				$.get("{% url 'Staff_Management:department_delete' %}", {old_content: old_content}, function(){
+					ID = "";
+				})
+			}
+			department_create = false;
+			department_edit = false;
+			department_delete = false;
+			old_content="";
+			modify_operation()
+		});
+		$("#department_Cancel").click(function(){
+			ID = "";
+			department_create = false;
+			department_edit = false;
+			department_delete = false;
+			modify_operation()
+		});
+		$("#department_Save").hide();
+		$("#department_Cancel").hide();
+	});
+</script>
 {% endblock %}
