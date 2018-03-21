@@ -16,6 +16,30 @@
 <link href="{% static 'css/SM/lightbox.min.css' %}" rel="stylesheet">
 <!-- Main Stylesheet File -->
 <link href="{% static 'css/SM/style.css' %}" rel="stylesheet">
+<style>
+	.button {
+	  display: inline-block;
+	  padding: 5px 10px;
+	  font-size: 8;
+	  cursor: pointer;
+	  text-align: center;   
+	  text-decoration: none;
+	  outline: none;
+	  color: #000;
+	  background-color: #fff;
+	  border: none;
+	  border-radius: 15px;
+	  box-shadow: 0 9px #999;
+	}
+
+	.button:hover {background-color: #337ab7}
+
+	.button:active {
+	  background-color: #3e8e41;
+	  box-shadow: 0 5px #666;
+	  transform: translateY(4px);
+}
+</style>
 {% endblock %}
 
 {% block content %}
@@ -32,177 +56,65 @@
 					<div id="department_li">
 						<li id="all" data-filter="*" class="filter-active">All</li>
 						{% for department in departments %}
-							<li id="{{ department.name }}" data-filter="{{ department.name }}" >{{ department.name }}</li>
-	                    {% empty %}
-	                        <li>None</li>
+							<li id="{{ department.name }}" data-filter=".filter-{{ department.name }}" >{{ department.name }}</li>
 	                    {% endfor %}
 					</div>
                     <div>
-	                    <button id="department_create">Create</button>
-	                    <button id="department_edit">Edit</button>
-	                    <button id="department_delete">Delete</button>
-	                	<button id="department_Save">Save</button>
-	                    <button id="department_Cancel">Cancel</button>
+	                    <button id="department_create" class="button">Create</button>
+	                    <button id="department_edit" class="button">Edit</button>
+	                    <button id="department_delete" class="button">Delete</button>
+	                	<button id="department_Save" class="button">Save</button>
+	                    <button id="department_Cancel" class="button">Cancel</button>
                 	</div>
 				</ul>
 				
 			</div>
 		</div>
-
-		<!-- <div class="row portfolio-container">
-
-			<div class="col-lg-4 col-md-6 portfolio-item filter-app wow fadeInUp">
-				<div class="portfolio-wrap">
-					<figure>
-						<img src="img/portfolio/app1.jpg" class="img-fluid" alt="">
-						<a href="img/portfolio/app1.jpg" data-lightbox="portfolio" data-title="部门1" class="link-preview" title="Preview"><i class="ion ion-eye"></i></a>
-						<a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
-					</figure>
-
-					<div class="portfolio-info">
-						<h4><a href="#">岗位1</a></h4>
-						<p>部门1</p>
+		<hr />
+		<div id="post_list" class="row portfolio-container">
+			{% for departmentpost in DepartmentPosts %}
+				<div class="col-lg-4 col-md-6 portfolio-item filter-{{ departmentpost.department_id }} wow fadeInUp">
+					<div class="portfolio-wrap">
+						<div class="portfolio-info">
+							<h4>岗位名称：{{ departmentpost.department_post_name }}</h4>
+							<p>部门名称：{{ departmentpost.department_id }}</p>
+							<p>管理权限:
+							{% if departmentpost.access_right_1 %}
+								员工;
+							{% endif %}
+							{% if departmentpost.access_right_2 %}
+								焊材;
+							{% endif %}
+							{% if departmentpost.access_right_3 %}
+								WPS;
+							{% endif %}
+							{% if departmentpost.access_right_4 %}
+								焊接项目;
+							{% endif %}
+							</p>
+							<div align="right">
+								<a id="{{ departmentpost.id }}" href="{% url 'Staff_Management:edit_post' departmentpost.id %}">Edit</a>
+								<a href="javascript:if(confirm('确实要删除该内容吗?')){location='{% url 'Staff_Management:delete_post' departmentpost.id %}'}">Delete</a>
+							</div>
+						</div>
 					</div>
 				</div>
-			</div>
-
-			<div class="col-lg-4 col-md-6 portfolio-item filter-app wow fadeInUp" data-wow-delay="0.1s">
-				<div class="portfolio-wrap">
-					<figure>
-						<img src="img/portfolio/app2.jpg" class="img-fluid" alt="">
-						<a href="img/portfolio/app2.jpg" class="link-preview" data-lightbox="portfolio" data-title="部门1" title="Preview"><i class="ion ion-eye"></i></a>
-						<a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
-					</figure>
-
-					<div class="portfolio-info">
-						<h4><a href="#">岗位2</a></h4>
-						<p>部门1</p>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-lg-4 col-md-6 portfolio-item filter-app wow fadeInUp" data-wow-delay="0.2s">
-				<div class="portfolio-wrap">
-					<figure>
-						<img src="img/portfolio/app3.jpg" class="img-fluid" alt="">
-						<a href="img/portfolio/app3.jpg" class="link-preview" data-lightbox="portfolio" data-title="部门1" title="Preview"><i class="ion ion-eye"></i></a>
-						<a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
-					</figure>
-
-					<div class="portfolio-info">
-						<h4><a href="#">岗位3</a></h4>
-						<p>部门1</p>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-lg-4 col-md-6 portfolio-item filter-card wow fadeInUp">
-				<div class="portfolio-wrap">
-					<figure>
-						<img src="img/portfolio/card1.jpg" class="img-fluid" alt="">
-						<a href="img/portfolio/card1.jpg" class="link-preview" data-lightbox="portfolio" data-title="部门2" title="Preview"><i class="ion ion-eye"></i></a>
-						<a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
-					</figure>
-
-					<div class="portfolio-info">
-						<h4><a href="#">岗位4</a></h4>
-						<p>部门2</p>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-lg-4 col-md-6 portfolio-item filter-card wow fadeInUp" data-wow-delay="0.1s">
-				<div class="portfolio-wrap">
-					<figure>
-						<img src="img/portfolio/card2.jpg" class="img-fluid" alt="">
-						<a href="img/portfolio/card2.jpg" class="link-preview" data-lightbox="portfolio" data-title="部门2" title="Preview"><i class="ion ion-eye"></i></a>
-						<a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
-					</figure>
-
-					<div class="portfolio-info">
-						<h4><a href="#">岗位5</a></h4>
-						<p>部门2</p>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-lg-4 col-md-6 portfolio-item filter-card wow fadeInUp" data-wow-delay="0.2s">
-				<div class="portfolio-wrap">
-					<figure>
-						<img src="img/portfolio/card3.jpg" class="img-fluid" alt="">
-						<a href="img/portfolio/card3.jpg" class="link-preview" data-lightbox="portfolio" data-title="部门2" title="Preview"><i class="ion ion-eye"></i></a>
-						<a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
-					</figure>
-
-					<div class="portfolio-info">
-						<h4><a href="#">岗位6</a></h4>
-						<p>部门2</p>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-lg-4 col-md-6 portfolio-item filter-web wow fadeInUp">
-				<div class="portfolio-wrap">
-					<figure>
-						<img src="img/portfolio/web1.jpg" class="img-fluid" alt="">
-						<a href="img/portfolio/web1.jpg" class="link-preview" data-lightbox="portfolio" data-title="部门3" title="Preview"><i class="ion ion-eye"></i></a>
-						<a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
-					</figure>
-
-					<div class="portfolio-info">
-						<h4><a href="#">岗位7</a></h4>
-						<p>部门3</p>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-lg-4 col-md-6 portfolio-item filter-web wow fadeInUp" data-wow-delay="0.1s">
-				<div class="portfolio-wrap">
-					<figure>
-						<img src="img/portfolio/web2.jpg" class="img-fluid" alt="">
-						<a href="img/portfolio/web2.jpg" class="link-preview" data-lightbox="portfolio" data-title="部门3" title="Preview"><i class="ion ion-eye"></i></a>
-						<a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
-					</figure>
-
-					<div class="portfolio-info">
-						<h4><a href="#">岗位8</a></h4>
-						<p>部门3</p>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-lg-4 col-md-6 portfolio-item filter-web wow fadeInUp" data-wow-delay="0.2s">
-				<div class="portfolio-wrap">
-					<figure>
-						<img src="img/portfolio/web3.jpg" class="img-fluid" alt="">
-						<a href="img/portfolio/web3.jpg" class="link-preview" data-lightbox="portfolio" data-title="部门3" title="Preview"><i class="ion ion-eye"></i></a>
-						<a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
-					</figure>
-
-					<div class="portfolio-info">
-						<h4><a href="#">岗位9</a></h4>
-						<p>部门3</p>
-					</div>
-				</div>
-			</div> -->
-
+            {% endfor %}
 		</div>
-
+		<a id="new_post" class="button" href= "{% url 'Staff_Management:add_post' %}">New</a>
 	</div>
+	
+
 </section><!-- #portfolio -->
 <!-- 本网页内容 -->
 {% endblock %}
 {% block script %}
 <!-- 本网页包含的特定JavaScript -->
 <script src="{% static 'js/SM/jquery-migrate.min.js' %}"></script>
-<!-- <script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>-->
-<!-- <script src="lib/easing/easing.min.js"></script> -->
-<!-- <script src="lib/superfish/hoverIntent.js"></script> -->
 <script src="{% static 'js/SM/superfish.min.js' %}"></script>
 <script src="{% static 'js/SM/wow.min.js' %}"></script>
 <script src="{% static 'js/SM/waypoints.min.js' %}"></script>
 <script src="{% static 'js/SM/counterup.min.js' %}"></script>
-<!-- <script src="lib/owlcarousel/owl.carousel.min.js"></script> -->
 <script src="{% static 'js/SM/isotope.pkgd.min.js' %}"></script>
 <script src="{% static 'js/SM/lightbox.min.js' %}"></script>
 <script src="{% static 'js/SM/jquery.touchSwipe.min.js' %}"></script>
@@ -241,7 +153,8 @@
 			input.setAttribute('size', 10);
 			var li = document.createElement('li');
 			li.setAttribute('id', 'create_department');
-			li.setAttribute('data-filter', 'create_department');
+			li.setAttribute('data-filter', '.filter-create_department');
+			li.setAttribute('class', '');
 			li.append(input);
 			$("#department_li").append(li);
 			ensure_operation();
@@ -284,10 +197,12 @@
 					$("#"+ID).remove();
 					var li = document.createElement('li');
 					li.setAttribute('id', data);
-					li.setAttribute('data-filter', data);
+					li.setAttribute('data-filter', ".filter-" + data);
+					li.setAttribute('class', '');
 					li.append(data);
 					$("#department_li").append(li);
 					ID = "";
+					parent.location.reload();
 				})
 			}
 			if(department_edit)
@@ -297,14 +212,17 @@
 				$.get("{% url 'Staff_Management:department_edit' %}", {name: department_name, old_content: old_content}, function(data){
 					$("#"+ID).empty();
 					$("#"+ID).append(data);
-					$("#"+ID).setAttribute('id', data);
+					$("#"+ID).attr('data-filter', ".filter-" + data);
+					$("#"+ID).attr('id', data);
 					ID = "";
+					parent.location.reload();
 				})
 			}
 			if(department_delete)
 			{
 				$.get("{% url 'Staff_Management:department_delete' %}", {old_content: old_content}, function(){
 					ID = "";
+					parent.location.reload();
 				})
 			}
 			department_create = false;
@@ -319,9 +237,12 @@
 			department_edit = false;
 			department_delete = false;
 			modify_operation()
+			parent.location.reload();
 		});
 		$("#department_Save").hide();
 		$("#department_Cancel").hide();
+		
+
 	});
 </script>
 {% endblock %}

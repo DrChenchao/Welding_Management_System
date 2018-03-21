@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}edit post{% endblock %}
+{% block css %}
+
+{% endblock %}
+
+{% block content %}
+<div>
+	<h1>修改岗位信息</h1>
+	<hr />
+	<form method="post" action="{% url 'Staff_Management:edit_post' department_id %}">
+		{% csrf_token %}
+        {% for field in form %}
+        	<br />
+            {{ field.errors }}
+            {{ field.help_text }}
+            {{ field.label_tag }}:{{ field }}
+        {% endfor %}
+        <hr />
+		<button type="submit" name="submit">确认</button>
+    </form>
+</div>	
+{% endblock %}
+
+{% block script %}
+<!-- 本网页包含的特定JavaScript -->
+{% endblock %}

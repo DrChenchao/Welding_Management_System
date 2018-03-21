@@ -1,8 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.template.defaultfilters import slugify
 # Create your models here.
 class Department(models.Model):
 	name = models.CharField(max_length=20)
+	slug = models.SlugField(unique=True)
+	def save(self, *args, **kwargs):
+		self.slug = slugify(self.name)
+		super(Department, self).save(*args, **kwargs)
+	def __str__(self):
+		return self.slug
 
 class DepartmentPost(models.Model):
 	department_id = models.ForeignKey(Department,on_delete=models.CASCADE,)
@@ -11,6 +18,8 @@ class DepartmentPost(models.Model):
 	access_right_2 = models.BooleanField(blank=True,default=False)
 	access_right_3 = models.BooleanField(blank=True,default=False)
 	access_right_4 = models.BooleanField(blank=True,default=False)
+	def __str__(self):
+		return self.department_post_name
 
 class Staff(models.Model):
 	gender_category = (
@@ -21,7 +30,6 @@ class Staff(models.Model):
 	post = models.ForeignKey(DepartmentPost,on_delete=models.CASCADE,)
 	working_address = models.CharField(max_length=100)
 	home_address = models.CharField(max_length=100,blank=True,null=True)
-	#emile = models.EmailField(max_length=254)
 	telephone_number = models.CharField(max_length=20)
 	id_number = models.CharField(max_length=20)
 	nationality = models.CharField(max_length=10)
@@ -44,3 +52,5 @@ class Welder(models.Model):
 	qualification  = models.CharField(max_length=1, choices=qualification_category,blank=True,null=True)
 	expiry_date = models.DateTimeField(blank=True,null=True)
 	prolongation_date = models.DateTimeField(blank=True,null=True)
+	def __str__(self):
+		return self.staff.user.username
