@@ -3,17 +3,13 @@ from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 # Create your models here.
 class Department(models.Model):
-	name = models.CharField(max_length=20)
-	slug = models.SlugField(unique=True)
-	def save(self, *args, **kwargs):
-		self.slug = slugify(self.name)
-		super(Department, self).save(*args, **kwargs)
+	name = models.CharField(max_length=20,unique=True)
 	def __str__(self):
-		return self.slug
+		return self.name
 
 class DepartmentPost(models.Model):
 	department_id = models.ForeignKey(Department,on_delete=models.CASCADE,)
-	department_post_name = models.CharField(max_length=30)
+	department_post_name = models.CharField(max_length=30,unique=True)
 	access_right_1 = models.BooleanField(blank=True,default=False)
 	access_right_2 = models.BooleanField(blank=True,default=False)
 	access_right_3 = models.BooleanField(blank=True,default=False)

@@ -130,8 +130,9 @@
 		<!-- Modal content -->
 		<div class="modal-content">
 			<span class="close">&times;</span>
-			<div id="weld_form"></div>
-			
+			<div id="weld_form">
+				
+			</div>
 		</div>
 	</div>
 </section><!-- #portfolio -->
@@ -189,7 +190,6 @@
 					// $("id_staff").find("option[text=+"+id[1]+"]").attr("selected",true);
 				})
 			}
-		 
 		});
 		$("#table_create").click(function(){
 			modal.style.display = "block";
@@ -202,8 +202,6 @@
 
 		$(".close").click(function(){
 			modal.style.display = "none";
-			staff_create = false;
-			staff_edit = false;
 		});
 	});
 </script>

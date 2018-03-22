@@ -55,7 +55,6 @@ def department_delete(request):
 def add_post(request):
 	form = PostForm()
 	if request.method == 'POST':
-		print(request.POST)
 		form = PostForm(request.POST)
 		if form.is_valid():
 			form.save(commit=True)
@@ -69,12 +68,9 @@ def edit_post(request, departmentpost_id):
 	departmentpost = DepartmentPost.objects.get(id = departmentpost_id)
 	if request.method == 'POST':
 		form = PostForm(request.POST)
-		if form.is_valid():
-			departmentpost.delete();
-			form.save(commit=True)
-			return HttpResponseRedirect('/Staff_Management/staff_management')
-		else:
-			print(form.errors)
+		departmentpost.delete();
+		form.save(commit=True)
+		return HttpResponseRedirect('/Staff_Management/staff_management')
 	else:
 		qdict = QueryDict('', mutable=True)
 		qdict.update(departmentpost.__dict__)
