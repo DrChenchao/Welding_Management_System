@@ -7,13 +7,16 @@ from django.http import HttpResponse
 from Staff_Management.forms import *
 from django.http import QueryDict
 from django.http import HttpResponseRedirect
+# from django.forms.models import model_to_dict
+from django.core import serializers
 # Create your views here.
 
 @login_required
 def staff_management(request):
 	departments = Department.objects.all()
 	DepartmentPosts = DepartmentPost.objects.all()
-	context_dict = {'departments': departments, 'DepartmentPosts': DepartmentPosts}
+	staffs = Staff.objects.all()
+	context_dict = {'departments': departments, 'DepartmentPosts': DepartmentPosts, 'staffs': staffs}
 	return render(request, 'Staff_Management/staff_management.html',context = context_dict)
 
 @login_required
@@ -78,3 +81,53 @@ def delete_post(request, departmentpost_id):
 	departmentpost = DepartmentPost.objects.get(id = departmentpost_id)
 	departmentpost.delete();
 	return HttpResponseRedirect('/Staff_Management/staff_management')
+
+@login_required
+def staff_create(request):
+	departmentposts = DepartmentPost.objects.all()
+	result = serializers.serialize('json', departmentposts)
+	return HttpResponse(result)
+
+@login_required
+def staff_edit(request):
+	departmentposts = DepartmentPost.objects.all()
+	result = serializers.serialize('json', departmentposts)
+	return HttpResponse(result)
+
+@login_required
+def staff_create_confirm(request):
+	if request.method == 'GET':
+		username = request.GET['username']
+		email = request.GET['email']
+		phonenumber = request.GET['telephone']
+		post = request.GET['post']
+		password = '12345678'
+		u = User(username = username, email=email)
+		u.set_password(password)
+		u.is_staff = True
+		u.save();
+		d = DepartmentPost.objects.get(id = post)
+		p = Staff(user = u, telephone_number = phonenumber, post = d)
+		p.save();
+	return HttpResponse(None)
+
+@login_required
+def staff_edit_confirm(request):
+	if request.method == 'GET':
+		staff_ID = request.GET['staff_ID']
+		username = request.GET['username']
+		email = request.GET['email']
+		phonenumber = request.GET['telephone']
+		post = request.GET['post']
+		u = User.objects.filter(id=staff_ID).update(username=username,email=email)
+		d = DepartmentPost.objects.get(id = post)
+		p = Staff.objects.filter(user = User.objects.get(id=staff_ID)).update(telephone_number = phonenumber, post = d)
+	return HttpResponse(None)
+
+@login_required
+def staff_delete_confirm(request):
+	if request.method == 'GET':
+		staff_ID = request.GET['staff_ID']
+		Staff.objects.filter(user = User.objects.get(id=staff_ID)).delete()
+		User.objects.filter(id=staff_ID).delete()
+	return HttpResponse(None)

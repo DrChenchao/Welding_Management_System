@@ -11,4 +11,9 @@ urlpatterns = [
     url(r'^add_post/$', views.add_post, name='add_post'),
     url(r'^edit_post/(?P<departmentpost_id>[\w\-]+)/$', views.edit_post, name='edit_post'),
     url(r'^delete_post/(?P<departmentpost_id>[\w\-]+)/$', views.delete_post, name='delete_post'),
+    url(r'^staff_create/$', views.staff_create, name='staff_create'),
+    url(r'^staff_edit/$', views.staff_edit, name='staff_edit'),
+    url(r'^staff_create_confirm/$', views.staff_create_confirm, name='staff_create_confirm'),
+    url(r'^staff_edit_confirm/$', views.staff_edit_confirm, name='staff_edit_confirm'),
+    url(r'^staff_delete_confirm/$', views.staff_delete_confirm, name='staff_delete_confirm'),
 ]

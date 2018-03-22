@@ -27,15 +27,15 @@ class Staff(models.Model):
         ('F', 'Female'),
     )
 	user = models.OneToOneField(User,blank=True,null=True,on_delete=models.CASCADE,)
-	post = models.ForeignKey(DepartmentPost,on_delete=models.CASCADE,)
-	working_address = models.CharField(max_length=100)
+	post = models.ForeignKey(DepartmentPost,blank=True,null=True,on_delete=models.CASCADE,)
+	working_address = models.CharField(max_length=100,blank=True,null=True)
 	home_address = models.CharField(max_length=100,blank=True,null=True)
-	telephone_number = models.CharField(max_length=20)
-	id_number = models.CharField(max_length=20)
-	nationality = models.CharField(max_length=10)
-	gender = models.CharField(max_length=1, choices=gender_category)
-	birth_date = models.DateTimeField()
-	Photo = models.ImageField(upload_to='Staff/',blank=True)
+	telephone_number = models.CharField(max_length=20,blank=True,null=True,)
+	id_number = models.CharField(max_length=20,blank=True,null=True,)
+	nationality = models.CharField(max_length=10,blank=True,null=True,)
+	gender = models.CharField(max_length=1, choices=gender_category,blank=True,null=True,)
+	birth_date = models.DateTimeField(blank=True,null=True,)
+	Photo = models.ImageField(upload_to='Staff/',blank=True,null=True,)
 	performance = models.DecimalField(max_digits=5, decimal_places=2,blank=True,null=True)
 	def __str__(self):
 		return self.user.username

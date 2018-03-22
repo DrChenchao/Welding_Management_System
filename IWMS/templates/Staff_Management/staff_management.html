@@ -16,6 +16,10 @@
 <link href="{% static 'css/SM/lightbox.min.css' %}" rel="stylesheet">
 <!-- Main Stylesheet File -->
 <link href="{% static 'css/SM/style.css' %}" rel="stylesheet">
+<!-- Jquery.datatables.css -->
+<link href="{% static 'BASE/datatables/css/jquery.dataTables.min.css' %}" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static 'DataTables/datatables.min.css' %}"/>
+<script type="text/javascript" src="{% static 'DataTables/datatables.min.js' %}"></script>
 <style>
 	.button {
 	  display: inline-block;
@@ -38,6 +42,43 @@
 	  background-color: #3e8e41;
 	  box-shadow: 0 5px #666;
 	  transform: translateY(4px);
+}
+</style>
+<style>
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 20%;
+}
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
 }
 </style>
 {% endblock %}
@@ -103,8 +144,65 @@
 		</div>
 		<a id="new_post" class="button" href= "{% url 'Staff_Management:add_post' %}">New</a>
 	</div>
+	<hr />
 	
-
+	<!-- /.row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <p>人员管理</p>
+                </div>
+                <div class="panel-body">
+                    <table  width="100%" class="display" id="staff_table" class="display">
+				        <thead>
+				            <tr>
+				            	<th>编号</th>
+				                <th>用户</th>
+	                            <th>邮箱</th>
+	                            <th>电话</th>
+	                            <th>职位</th>
+	                            <th>绩效</th>
+				            </tr>
+				        </thead>
+				        <tbody>
+				        {% for staff in staffs %}
+				            <tr>
+				            	<td>{{ staff.user.id }}</td>
+				                <td>{{ staff.user.username }}</td>
+	                            <td>{{ staff.user.email }}</td>
+	                            <td>{{ staff.telephone_number }}</td>
+	                            <td>{{ staff.post }}</td>
+	                            <td>{{ staff.performance }}</td>
+				            </tr>
+				        {% endfor %}
+				        </tbody>
+				    </table>
+				    <button id="table_create">Create</button>
+				    <button id="table_delete">Delete</button>
+				    <button id="table_edit">Edit</button>
+				    <button id="table_detail">Detail</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+    <div id="myModal" class="modal">
+		<!-- Modal content -->
+		<div class="modal-content">
+			<span class="close">&times;</span>
+            <p>用户名:<input type="text" id="create_username"  size="10"></p>
+            <p>邮箱:<input type="text" id="create_email"  size="10"></p>
+            <p>电话:<input type="text" id="create_telephone"  size="10"></p>
+            <p>职位:
+	            <select id="create_post">
+					
+				</select>
+            </p>
+            <hr />
+            <button id="confirm" class="button">确认</button>
+		</div>
+	</div>
 </section><!-- #portfolio -->
 <!-- 本网页内容 -->
 {% endblock %}
@@ -126,8 +224,11 @@
 <script src="{% static 'js/SM/jquery.dataTables.min.js' %}"></script>
 <script src="{% static 'js/SM/dataTables.bootstrap.min.js' %}"></script>
 <script src="{% static 'js/SM/dataTables.responsive.js' %}"></script>
+
 <script>
 	$(document).ready(function(){
+		$("#department_Save").hide();
+		$("#department_Cancel").hide();
 		function modify_operation() {
 			$("#department_Save").hide();
 			$("#department_Cancel").hide();
@@ -239,10 +340,119 @@
 			modify_operation()
 			parent.location.reload();
 		});
-		$("#department_Save").hide();
-		$("#department_Cancel").hide();
+		
+		var table = $('#staff_table').DataTable();
+	  	$('#staff_table tbody').on( 'click', 'tr', function () {
+			if ( $(this).hasClass('selected') ) {
+			    $(this).removeClass('selected');
+			}
+			else {
+			    table.$('tr.selected').removeClass('selected');
+			    $(this).addClass('selected');
+			}
+		});
+		$("#table_delete").click(function(){
+			var id = table.row('.selected').data();
+			if (id!=null)
+			{
+				if(confirm('确实要删除该内容吗?'))
+				{
+					table.row('.selected').remove().draw( false );
+					$.get("{% url 'Staff_Management:staff_delete_confirm' %}", {staff_ID: id[0]}, function(){
+						parent.location.reload();
+					})	
+				}
+				
+			}
+		});
+		// Get the modal
+		var modal = document.getElementById('myModal');
+		var staff_create = false;
+		var staff_edit = false;
+		var staff_ID = null;
+		// Get the button that opens the modal
+		$("#table_edit").click(function(){
+			var id = table.row('.selected').data();
+			if (id!=null)
+			{
+				modal.style.display = "block";
+				$.getJSON("{% url 'Staff_Management:staff_edit' %}", function(json){
+					$("#create_post").empty();
+					var selected = document.createElement('option');
+					selected.setAttribute('value', '');
+					selected.append("---------");
+					$("#create_post").append(selected);
+					for(j = 0; j < json.length; j++) {
+						var option = document.createElement('option');
+						option.setAttribute('value', json[j].pk);
+						option.append(json[j].fields.department_post_name)
+						if(json[j].pk==id[0])
+						{
+							option.setAttribute('selected', 'selected');
+						}
+						$("#create_post").append(option)
+					}
+					document.getElementById("create_username").value= ""+id[1];
+					document.getElementById("create_email").value= ""+id[2];
+					document.getElementById("create_telephone").value= ""+id[3];
+					staff_edit = true;
+					staff_ID = id[0];
+				})
+			}
+		 
+		});
+		$("#table_create").click(function(){
+			modal.style.display = "block";
+			$.getJSON("{% url 'Staff_Management:staff_create' %}", function(json){
+				$("#create_post").empty();
+				var selected = document.createElement('option');
+				selected.setAttribute('value', '');
+				selected.setAttribute('selected', 'selected');
+				selected.append("---------");
+				$("#create_post").append(selected);				
+				for(j = 0; j < json.length; j++) {
+					var option = document.createElement('option');
+					option.setAttribute('value', json[j].pk);
+					option.append(json[j].fields.department_post_name)
+					$("#create_post").append(option)
+				}
+				staff_create = true;
+			})
+		});
+		$("#confirm").click(function(){
+			if(staff_create)
+			{
+				var username = $("#create_username").val();
+				var email = $("#create_email").val();
+				var telephone = $("#create_telephone").val();
+				var post = $("#create_post").val();
+				$.get("{% url 'Staff_Management:staff_create_confirm' %}", {username: username, email: email, telephone: telephone, post: post}, function(){
+					parent.location.reload();
+				})						
+			}
+			if(staff_edit)
+			{
+				var username = $("#create_username").val();
+				var email = $("#create_email").val();
+				var telephone = $("#create_telephone").val();
+				var post = $("#create_post").val();
+				$.get("{% url 'Staff_Management:staff_edit_confirm' %}", {staff_ID: staff_ID, username: username, email: email, telephone: telephone, post: post}, function(){
+					parent.location.reload();
+				})							
+			}
+			modal.style.display = "none";
+			staff_create = false;
+			staff_edit = false;
+			staff_ID = null;
+		});
+
 		
 
+		$(".close").click(function(){
+			modal.style.display = "none";
+			staff_create = false;
+			staff_edit = false;
+		});
 	});
 </script>
 {% endblock %}
