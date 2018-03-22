@@ -167,3 +167,11 @@ def welder_edit(request, staffid):
 		qdict.update(welder.__dict__)
 		form = WelderForm_edit(qdict)
 	return render(request, 'Staff_Management/welder_edit.html', {'form': form, 'staffid': staff_ID})
+
+@login_required
+def welder_delete(request):
+	if request.method == 'GET':
+		staff_ID = request.GET['staff_ID']
+		print(staff_ID)
+		Welder.objects.filter(staff = Staff.objects.get(id=staff_ID)).delete()
+	return HttpResponse(None)

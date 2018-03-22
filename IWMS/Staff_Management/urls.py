@@ -19,5 +19,6 @@ urlpatterns = [
     url(r'^staff_delete_confirm/$', views.staff_delete_confirm, name='staff_delete_confirm'),
     url(r'^welder_create/$', views.welder_create, name='welder_create'),
     url(r'^welder_edit/(?P<staffid>[\w\-]+)/$', views.welder_edit, name='welder_edit'),
-    
+    url(r'^welder_delete/$', views.welder_delete, name='welder_delete'),
+
 ]

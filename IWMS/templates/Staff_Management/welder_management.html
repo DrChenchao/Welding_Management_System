@@ -165,10 +165,10 @@
 			{
 				if(confirm('确实要删除该内容吗?'))
 				{
-					table.row('.selected').remove().draw( false );
-					// $.get("{% url 'Staff_Management:staff_delete_confirm' %}", {staff_ID: id[0]}, function(){
-					// 	parent.location.reload();
-					// })
+					$.get("{% url 'Staff_Management:welder_delete' %}", {staff_ID: id[0]}, function(){
+						table.row('.selected').remove().draw( false );
+						parent.location.reload();
+					})
 				}
 				
 			}
