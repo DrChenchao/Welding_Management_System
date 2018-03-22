@@ -20,6 +20,11 @@ def staff_management(request):
 	return render(request, 'Staff_Management/staff_management.html',context = context_dict)
 
 @login_required
+def welder_management(request):
+	welders = Welder.objects.all()
+	return render(request, 'Staff_Management/welder_management.html',locals())
+
+@login_required
 def department_creat(request):
 	name = "";
 	if request.method == 'GET':
@@ -131,3 +136,34 @@ def staff_delete_confirm(request):
 		Staff.objects.filter(user = User.objects.get(id=staff_ID)).delete()
 		User.objects.filter(id=staff_ID).delete()
 	return HttpResponse(None)
+
+@login_required
+def welder_create(request):
+	form = WelderForm()
+	if request.method == 'POST':
+		form = WelderForm(request.POST)
+		if form.is_valid():
+			welder = form.save(commit=True)
+			return HttpResponseRedirect('/Staff_Management/welder_management')
+		else:
+			print(form.errors)
+	return render(request, 'Staff_Management/welder_create.html', {'form': form})
+
+@login_required
+def welder_edit(request, staffid):
+	if request.method == 'POST':
+		form = WelderForm_edit(request.POST)
+		if form.is_valid():
+			temp= form.save(commit = False)
+			Welder.objects.filter(staff=Staff.objects.get(id = staffid)).update(
+				qualification=temp.qualification,expiry_date=temp.expiry_date,prolongation_date=temp.prolongation_date)
+			return HttpResponseRedirect('/Staff_Management/welder_management')
+		else:
+			print(form.errors)
+	else:
+		staff_ID = request.GET['staff_ID']
+		welder = Welder.objects.get(staff = Staff.objects.get(id = staff_ID))
+		qdict = QueryDict('', mutable=True)
+		qdict.update(welder.__dict__)
+		form = WelderForm_edit(qdict)
+	return render(request, 'Staff_Management/welder_edit.html', {'form': form, 'staffid': staff_ID})

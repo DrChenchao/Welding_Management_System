@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}auxilary_material{% endblock %}
+{% block css %}
+<!-- 本网页包含的特定css -->
+<!-- DataTables CSS -->
+<link href="{% static 'BASE/datatables/css/dataTables.bootstrap.css' %}" rel="stylesheet">
+
+<!-- DataTables Responsive CSS -->
+<link href="{% static 'BASE/datatables-responsive/dataTables.responsive.css' %}" rel="stylesheet">
+
+
+<!-- Main Stylesheet File -->
+<link href="{% static 'css/SM/style.css' %}" rel="stylesheet">
+<!-- Jquery.datatables.css -->
+<link href="{% static 'BASE/datatables/css/jquery.dataTables.min.css' %}" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static 'DataTables/datatables.min.css' %}"/>
+<script type="text/javascript" src="{% static 'DataTables/datatables.min.js' %}"></script>
+<style>
+	.button {
+	  display: inline-block;
+	  padding: 5px 10px;
+	  font-size: 8;
+	  cursor: pointer;
+	  text-align: center;   
+	  text-decoration: none;
+	  outline: none;
+	  color: #000;
+	  background-color: #fff;
+	  border: none;
+	  border-radius: 15px;
+	  box-shadow: 0 9px #999;
+	}
+
+	.button:hover {background-color: #337ab7}
+
+	.button:active {
+	  background-color: #3e8e41;
+	  box-shadow: 0 5px #666;
+	  transform: translateY(4px);
+}
+</style>
+<style>
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 20%;
+}
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<section id="portfolio"  class="section-bg"  >
+	<div class="container" >
+
+		<header class="section-header">
+			<h3 class="section-title">焊工管理</h3>
+		</header>
+
+	</div>
+	<hr />
+	
+	<!-- /.row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <table  width="100%" class="display" id="staff_table" class="display">
+				        <thead>
+				            <tr>
+				            	<th>ID</th>
+				            	<th>用户</th>
+				                <th>资质</th>
+	                            <th>资质到期时间</th>
+	                            <th>资质延期时间</th>
+				            </tr>
+				        </thead>
+				        <tbody>
+				        {% for welder in welders %}
+				            <tr>
+				            	<td>{{ welder.staff.id }}</td>
+				            	<td>{{ welder.staff }}</td>
+				                <td>{{ welder.qualification }}</td>
+	                            <td>{{ welder.expiry_date }}</td>
+	                            <td>{{ welder.prolongation_date }}</td>
+				            </tr>
+				        {% endfor %}
+				        </tbody>
+				    </table>
+				    <button id="table_create">Create</button>
+				    <button id="table_delete">Delete</button>
+				    <button id="table_edit">Edit</button>
+				    <button id="table_detail">Detail</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+    <div id="myModal" class="modal">
+		<!-- Modal content -->
+		<div class="modal-content">
+			<span class="close">&times;</span>
+			<div id="weld_form"></div>
+			
+		</div>
+	</div>
+</section><!-- #portfolio -->
+<!-- 本网页内容 -->
+{% endblock %}
+{% block script %}
+
+
+<!-- Template Main Javascript File -->
+<script src="{% static 'js/SM/main.js' %}"></script>
+<script src="{% static 'js/SM/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/SM/dataTables.bootstrap.min.js' %}"></script>
+<script src="{% static 'js/SM/dataTables.responsive.js' %}"></script>
+
+<script>
+	$(document).ready(function(){
+
+		var table = $('#staff_table').DataTable();
+	  	$('#staff_table tbody').on( 'click', 'tr', function () {
+			if ( $(this).hasClass('selected') ) {
+			    $(this).removeClass('selected');
+			}
+			else {
+			    table.$('tr.selected').removeClass('selected');
+			    $(this).addClass('selected');
+			}
+		});
+		$("#table_delete").click(function(){
+			var id = table.row('.selected').data();
+			if (id!=null)
+			{
+				if(confirm('确实要删除该内容吗?'))
+				{
+					table.row('.selected').remove().draw( false );
+					// $.get("{% url 'Staff_Management:staff_delete_confirm' %}", {staff_ID: id[0]}, function(){
+					// 	parent.location.reload();
+					// })
+				}
+				
+			}
+		});
+		// Get the modal
+		var modal = document.getElementById('myModal');
+		var staff_ID = null;
+		// Get the button that opens the modal
+		$("#table_edit").click(function(){
+			var id = table.row('.selected').data();
+			if (id!=null)
+			{
+				modal.style.display = "block";
+				$.get("{% url 'Staff_Management:welder_edit' 1 %}", {staff_ID: id[0]}, function(data){
+					$("#weld_form").empty();
+					$("#weld_form").html(data);
+					// $("#id_staff").val(id[0]);
+					// $("id_staff").find("option[text=+"+id[1]+"]").attr("selected",true);
+				})
+			}
+		 
+		});
+		$("#table_create").click(function(){
+			modal.style.display = "block";
+			$.get("{% url 'Staff_Management:welder_create' %}", function(data){
+				$("#weld_form").empty();
+				$("#weld_form").html(data);
+			})
+		});
+		
+
+		$(".close").click(function(){
+			modal.style.display = "none";
+			staff_create = false;
+			staff_edit = false;
+		});
+	});
+</script>
+{% endblock %}

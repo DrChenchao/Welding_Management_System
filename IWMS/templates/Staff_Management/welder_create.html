@@ -1,0 +1,12 @@
+<h1>新增焊工</h1>
+<hr />
+<form method="post" action="{% url 'Staff_Management:welder_create' %}">
+    {% csrf_token %}
+    {% for field in form %}
+        <br />
+        {{ field.help_text }}{{ field }}
+        {{ field.errors }}
+    {% endfor %}
+    <hr />
+    <button type="submit" name="submit">确认</button>
+</form>
