@@ -1,0 +1,12 @@
+<h1>信息编辑</h1>
+<hr />
+<form method="post" action="{% url 'User_Information:edit_staff' %}">
+    {% csrf_token %}
+    {% for field in form %}
+        <br />
+        {{ field.help_text }}{{ field }}
+        {{ field.errors }}
+    {% endfor %}
+    <hr />
+    <button type="submit" name="submit">确认</button>
+</form>

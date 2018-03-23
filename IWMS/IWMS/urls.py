@@ -14,19 +14,21 @@ Including another URLconf
     2. Import the include() function: from django.conf.urls import url, include
     3. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
-from django.conf.urls import url,include
+from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
+from User_Information.views import *
 
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'', include('INDEX.urls')),
-    url(r'^User_Information/', include('User_Information.urls')),
-	url(r'^Project_Management/', include('Project_Management.urls')),
-    url(r'^Staff_Management/', include('Staff_Management.urls')),
-    url(r'^WPS_Management/', include('WPS_Management.urls')),
+    # url(r'^admin/', admin.site.urls),
+    url(r'^edit_staff/$', edit_staff, name='edit_staff'),
+    url(r'', include('INDEX.urls', namespace='INDEX')),
+	url(r'^Project_Management/', include('Project_Management.urls', namespace='Project_Management')),
+    url(r'^Staff_Management/', include('Staff_Management.urls', namespace='Staff_Management')),
+    url(r'^WPS_Management/', include('WPS_Management.urls', namespace='WPS_Management')),
     url(r'^accounts/', include('registration.backends.simple.urls')),
-	url(r'^Material_Management/',include('Material_Management.urls')),
+	url(r'^Material_Management/',include('Material_Management.urls', namespace='Material_Management')),
+    url(r'^User_Information/', include('User_Information.urls', namespace='User_Information')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
