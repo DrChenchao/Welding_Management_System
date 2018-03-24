@@ -1,0 +1,333 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}WPS Detail{% endblock %}
+{% block css %}
+    <!-- 本网页包含的特定css -->
+        <!-- DataTables CSS -->
+    <link href="{% static 'BASE/datatables/css/dataTables.bootstrap.css' %}" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="{% static 'BASE/datatables-responsive/dataTables.responsive.css' %}" rel="stylesheet">
+
+    <!-- Jquery.datatables.css -->
+    <!--<link href="{% static 'BASE/datatables/css/jquery.dataTables.min.css' %}" rel="stylesheet">-->
+    <style>
+    #wps_detail_table {
+        table-layout: fixed;
+    }
+    #wps_detail_table th{
+        text-align: center;
+    }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">WPS明细</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <div>
+        <a href="{% url 'WPS_Management:wps_management' %}">返回</a>
+        <a href="{% url 'WPS_Management:wps_edit' wps.id%}">修改</a>
+        <a href="{% url 'WPS_Management:wps_delete' wps.id%}">删除</a>
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <p>焊接工艺规程（WPS）</p>
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <table width="100%"  class="table table-striped table-bordered table-hover" id="wps_detail_table">
+                        <tr>
+                            <th colspan="6" rowspan="2">WPS</th>
+                            <th colspan="3">编号</th>
+                            <th colspan="6">工程名称</th>
+                            <th colspan="3">焊接部位</th>
+                            <th colspan="6">管道名称</th>
+                            <th colspan="6">焊接工艺评定报告编号</th>
+                        </tr>
+                        <tr>
+                            <td colspan="3">{{ wps.id }}</td>
+                            <td colspan="6"></td>
+                            <td colspan="3"></td>
+                            <td colspan="6"></td>
+                            <td colspan="6"></td>
+                        </tr>
+                        <tr>
+                            <th colspan="1" rowspan="4">母材</th>
+                            <th colspan="2" >规格</th>
+                            <td colspan="6">{{ weldart.A_base_metal.basemetal.specifications }}</td>
+                            <th colspan="12">工艺简图</th>
+                            <th colspan="1" rowspan="5">外观检验</th>
+                            <td colspan="8" rowspan="5">{{ wps.defect_detecting }}</td>
+                        </tr>
+                        <tr>
+                            <th colspan="2">材质</th>
+                            <td colspan="6">{{ weldart.A_base_metal.basemetal.textrue }}</td>
+                            <td colspan="12" rowspan="11"></td>
+                        </tr>
+                        <tr>
+                            <th colspan="2">供货状态</th>
+                            <td colspan="6">#</td>
+                        </tr>
+                        <tr>
+                            <th colspan="2">标准号</th>
+                            <td colspan="6">#</td>
+                        </tr>
+                        <tr>
+                            <th colspan="1" rowspan="4">焊材</th>
+                            <th colspan="2">牌号</th>
+                            <th colspan="2">规格</th>
+                            <th colspan="2">烘烤温度</th>
+                            <th colspan="2">保温时间</th>
+                        </tr>
+                        <tr>
+                            <td colspan="2">{{ weldmaterialtech0.id }}</td>
+                            <td colspan="2">{{ weldmaterialtech0.size }}</td>
+                            <td colspan="2">{{ weldmaterialtech0.baking_temperature }}</td>
+                            <td colspan="2">{{ weldmaterialtech0.preservationg_time }}</td>
+                            <th colspan="4">坡口加工方法</th>
+                            <td colspan="5">#</td>
+                        </tr>
+                        <tr>
+                            {% if weldmaterialtech1 %}
+                                {% if weldmaterialtech1.id == weldmaterialtech0.id %}
+                                    {% if weldmaterialtech2 %}
+                                        {% if weldmaterialtech2.id == weldmaterialtech0.id %}
+                                            <td colspan="2"></td>
+                                            <td colspan="2"></td>
+                                            <td colspan="2"></td>
+                                            <td colspan="2"></td>
+                                        {% else %}
+                                            <td colspan="2">{{ weldmaterialtech2.id }}</td>
+                                            <td colspan="2">{{ weldmaterialtech2.size }}</td>
+                                            <td colspan="2">{{ weldmaterialtech2.baking_temperature }}</td>
+                                            <td colspan="2">{{ weldmaterialtech2.preservationg_time }}</td>
+                                        {% endif %}
+                                    {% endif %}
+                                {% else %}
+                                    <td colspan="2">{{ weldmaterialtech1.id }}</td>
+                                    <td colspan="2">{{ weldmaterialtech1.size }}</td>
+                                    <td colspan="2">{{ weldmaterialtech1.baking_temperature }}</td>
+                                    <td colspan="2">{{ weldmaterialtech1.preservationg_time }}</td>
+                                {% endif %}
+                            {% else %}
+                                <td colspan="2"></td>
+                                <td colspan="2"></td>
+                                <td colspan="2"></td>
+                                <td colspan="2"></td>
+                            {% endif %}
+                            <th colspan="4">坡口清理方法</th>
+                            <td colspan="5">{{ wps.groove_clean_method }}</td>
+                        </tr>
+                        <tr>
+                            {% if weldmaterialtech2 %}
+                                {% if weldmaterialtech1.id == weldmaterialtech0.id %}
+                                    <td colspan="2"></td>
+                                    <td colspan="2"></td>
+                                    <td colspan="2"></td>
+                                    <td colspan="2"></td>
+                                {% else %}
+                                    {% if weldmaterialtech2.id != weldmaterialtech1.id and weldmaterialtech2.id != weldmaterialtech0.id %}
+                                        <td colspan="2">{{ weldmaterialtech2.id }}</td>
+                                        <td colspan="2">{{ weldmaterialtech2.size }}</td>
+                                        <td colspan="2">{{ weldmaterialtech2.baking_temperature }}</td>
+                                        <td colspan="2">{{ weldmaterialtech2.preservationg_time }}</td>
+                                    {% else %}
+                                        <td colspan="2"></td>
+                                        <td colspan="2"></td>
+                                        <td colspan="2"></td>
+                                        <td colspan="2"></td>
+                                    {% endif %}
+                                {% endif %}
+                            {% else %}
+                                <td colspan="2"></td>
+                                <td colspan="2"></td>
+                                <td colspan="2"></td>
+                                <td colspan="2"></td>
+                            {% endif %}
+                            <th colspan="4">清焊根方法</th>
+                            <td colspan="5">{{ wps.weld_root_clean_method }}</td>
+                        </tr>
+                        <tr>
+                            <th colspan="1" rowspan="3">辅材</th>
+                            <td colspan="8">{{ weldauxiliary0.name }},{{ weldauxiliary0.description }}</td>
+                            <th colspan="4">预热温度</th>
+                            <td colspan="5">{{ wps.preheat_temperature }}</td>
+                        </tr>
+                        <tr>
+                            {% if weldauxiliary1 %}
+                                {% if weldauxiliary1.id == weldauxiliary0.id %}
+                                    <td colspan="8"></td>
+                                {% else %}
+                                    <td colspan="8">{{ weldauxiliary1.name }},{{ weldauxiliary1.description }}</td>
+                                {% endif %}
+                            {% else %}<td colspan="8"></td>
+                            {% endif %}
+                            <th colspan="4">预热保温方法</th>
+                            <td colspan="5">{{ wps.preheat_preservation_method }}</td>
+                        </tr>
+                        <tr>
+                            {% if weldauxiliary2.id %}
+                                {% if weldauxiliary2.id == weldauxiliary1.id %}
+                                    <td colspan="8"></td>
+                                {% else %}
+                                    <td colspan="8">{{ weldauxiliary2.name }},{{ weldauxiliary2.description }}</td>
+                                {% endif %}
+                            {% else %}<td colspan="8"></td>
+                            {% endif %}
+                            <th colspan="4">层间温度</th>
+                            <td colspan="5">{{ wps.interlayer_temperature }}</td>
+                        </tr>
+                        <tr>
+                            <th colspan="4">焊工资格要求</th>
+                            <td colspan="5">{{ wps.welder_qualification_demand }}</td>
+                            <th colspan="4">焊后热处理要求</th>
+                            <td colspan="5">{{ wps.PWHT }}</td>
+                        </tr>
+                        <tr>
+                            <th colspan="8">焊接规范参数</th>
+                            <th colspan="2" rowspan="3">焊接<br>设备</th>
+                            <th colspan="2" rowspan="3">电源<br>极性</th>
+                            <th colspan="2" rowspan="3">焊接<br>电流（A）</th>
+                            <th colspan="2" rowspan="3">电弧<br>电压（V)</th>
+                            <th colspan="2" rowspan="3">焊接速度<br>（cm/min）</th>
+                            <th colspan="12">气体保护焊</th>
+                        </tr>
+                        <tr>
+                            <th colspan="1" rowspan="2">层</th>
+                            <th colspan="1" rowspan="2">道</th>
+                            <th colspan="2" rowspan="2">焊接方法</th>
+                            <th colspan="4" rowspan="2">焊材/尺寸</th>
+                            <th colspan="2" rowspan="2">钨极直径</th>
+                            <th colspan="2" rowspan="2">喷嘴直径</th>
+                            <th colspan="4" rowspan="1">保护气体</th>
+                            <th colspan="4" rowspan="1">气体流量（L/min）</th>
+                        </tr>
+                        <tr>
+                            <th colspan="2" rowspan="1">名称</th>
+                            <th colspan="2" rowspan="1">纯度</th>
+                            <th colspan="2" rowspan="1">正面</th>
+                            <th colspan="2" rowspan="1">背面</th>
+                        </tr>
+                        {% for weldcondition in weldconditions %}<tr>
+                            <td colspan="1">{{ weldcondition.layer }}</td>
+                            <td colspan="1">{{ weldcondition.path }}</td>
+                            <td colspan="2">{{ weldcondition.welding_method }}</td>
+                            <td colspan="2">##{{ weldmaterialtech.weldingmaterial.grade }}</td>
+                            <td colspan="2">##{{ weldmaterialtech.weldingmaterial.specifications }}</td>
+                            <td colspan="2">{{ weldmachine.name }}</td>
+                            <td colspan="2">{{ weldcondition.current_polarity }}</td>
+                            <td colspan="2">{{ weldcondition.min_current }}~{{ weldcondition.max_current }}</td>
+                            <td colspan="2">{{ weldcondition.min_voltage }}~{{ weldcondition.max_voltage }}</td>
+                            <td colspan="2">{{ weldcondition.welding_speed }}</td>
+                            <td colspan="2">{{ weldcondition.tungsten_pole_diameter }}</td>
+                            <td colspan="2">{{ weldcondition.nozzle_diameter }}</td>
+                            <td colspan="2">{{ weldgas.name }}</td>
+                            <td colspan="2">##{{ weldgas.price }}</td>
+                            <td colspan="2">{{ weldcondition.frontal_gas_flow }}</td>
+                            <td colspan="2">{{ weldcondition.back_gas_flow }}</td>
+                        </tr>
+                        {% empty %}<tr>
+                            <td colspan="1">null</td>
+                            <td colspan="1"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="1">null</td>
+                            <td colspan="1"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="1"></td>
+                            <td colspan="1"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="1"></td>
+                            <td colspan="1"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                            <td colspan="2"></td>
+                        </tr>
+                        <tr>
+                            <th colspan="2" rowspan="2">备注</th>
+                            <td colspan="28" rowspan="2">{{ wps.mark }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+{% endblock %}
+{% block script %}
+    <!-- 本网页包含的特定JavaScript -->
+        <!-- 本网页包含的特定JavaScript -->
+    <!-- DataTables JavaScript -->
+    <script src="{% static 'BASE/datatables/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'BASE/datatables/js/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'BASE/datatables-responsive/dataTables.responsive.js' %}"></script>
+    <!-- Page-Level Demo Scripts - Tables - Use for reference -->
+    <script>
+    </script>
+{% endblock %}

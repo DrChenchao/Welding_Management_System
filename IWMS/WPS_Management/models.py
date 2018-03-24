@@ -68,7 +68,7 @@ class WeldConditionParameter(models.Model):
 	layer = models.IntegerField(blank=True,null=True)
 	path = models.IntegerField(blank=True,null=True)
 	welding_method = models.CharField(max_length=50,blank=True,null=True)
-	welding_material = models.ForeignKey(WeldingMaterial,on_delete=models.CASCADE,blank=True,null=True)
+	welding_material = models.ForeignKey(WeldingMaterialTechnology,on_delete=models.CASCADE,blank=True,null=True)
 	auxiliary = models.ForeignKey(Auxiliary,on_delete=models.CASCADE,blank=True,null=True)
 	current_polarity = models.CharField(max_length=1, choices=current_polarity_category,blank=True,null=True)
 	max_current = models.FloatField(blank=True,null=True)
