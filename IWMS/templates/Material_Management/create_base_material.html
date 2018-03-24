@@ -1,6 +1,6 @@
-<h1>信息编辑</h1>
+<h1>新建母材</h1>
 <hr />
-<form method="post" action="{% url 'User_Information:edit_staff' %}" enctype="multipart/form-data">
+<form method="post" action="{% url 'Material_Management:create_base_material' %}">
     {% csrf_token %}
     {% for field in form %}
         <br />

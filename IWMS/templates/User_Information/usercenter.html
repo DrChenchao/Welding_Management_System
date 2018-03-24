@@ -181,7 +181,11 @@
             <dd class="clear"></dd>
             {% endif %}
         </dl>
-        <img src="{% static 'images/UI/head.jpg' %}" alt="Photo of Cthulu" id="pic" />
+        {% if staff.Photo %}
+	    <img src="{{ MEDIA_URL }}{{ staff.Photo }}" alt="{{ request.user.username }}" id="pic" />
+	    {% else %}
+	    <img src="{% static 'images/UI/head.jpg' %}" alt="Photo of example" id="pic" />
+	    {% endif %}
         <div class="clear"></div>
     </div>
     <div id="myModal" class="modal">

@@ -67,6 +67,13 @@
     border: 1px solid #888;
     width: 20%;
 }
+.modal-content2 {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 60%;
+}
 /* The Close Button */
 .close {
     color: #aaaaaa;
@@ -189,18 +196,24 @@
     <!-- /.row -->
     <div id="myModal" class="modal">
 		<!-- Modal content -->
-		<div class="modal-content">
+		<div id = "V1" class="modal-content">
 			<span class="close">&times;</span>
-            <p>用户名:<input type="text" id="create_username"  size="10"></p>
-            <p>邮箱:<input type="text" id="create_email"  size="10"></p>
-            <p>电话:<input type="text" id="create_telephone"  size="10"></p>
-            <p>职位:
-	            <select id="create_post">
-					
-				</select>
-            </p>
-            <hr />
-            <button id="confirm" class="button">确认</button>
+			<div>
+				<p>用户名:<input type="text" id="create_username"  size="10"></p>
+	            <p>邮箱:<input type="text" id="create_email"  size="10"></p>
+	            <p>电话:<input type="text" id="create_telephone"  size="10"></p>
+	            <p>职位:
+		            <select id="create_post">
+						
+					</select>
+	            </p>
+	            <hr />
+	            <button id="confirm" class="button">确认</button>
+			</div>
+		</div>
+		<div id = "V2" class="modal-content2">
+			<span class="close">&times;</span>
+			<div id = "V3"></div>
 		</div>
 	</div>
 </section><!-- #portfolio -->
@@ -372,6 +385,8 @@
 		var staff_ID = null;
 		// Get the button that opens the modal
 		$("#table_edit").click(function(){
+			$("#V1").show();
+			$("#V2").hide();
 			var id = table.row('.selected').data();
 			if (id!=null)
 			{
@@ -401,9 +416,29 @@
 			}
 		 
 		});
+
+		$("#table_detail").click(function(){
+			$("#V1").hide();
+			$("#V2").show();
+			var id = table.row('.selected').data();
+			if (id!=null)
+			{
+				modal.style.display = "block";
+				$.get("{% url 'Staff_Management:staff_detail' %}",{staffid: id[0]}, function(data){
+					$("#V3").empty();
+					$("#V3").append(data);
+				})
+			}
+		 
+		});
+		
+
 		$("#table_create").click(function(){
+			$("#V1").show();
+			$("#V2").hide();
 			modal.style.display = "block";
 			$.getJSON("{% url 'Staff_Management:staff_create' %}", function(json){
+				
 				$("#create_post").empty();
 				var selected = document.createElement('option');
 				selected.setAttribute('value', '');

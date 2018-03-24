@@ -1,6 +1,6 @@
-<h1>信息编辑</h1>
+<h1>编辑保护气</h1>
 <hr />
-<form method="post" action="{% url 'User_Information:edit_staff' %}" enctype="multipart/form-data">
+<form method="post" action="{% url 'Material_Management:edit_welding_gas' ID %}">
     {% csrf_token %}
     {% for field in form %}
         <br />

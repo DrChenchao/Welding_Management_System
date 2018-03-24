@@ -20,5 +20,6 @@ urlpatterns = [
     url(r'^welder_create/$', views.welder_create, name='welder_create'),
     url(r'^welder_edit/(?P<staffid>[\w\-]+)/$', views.welder_edit, name='welder_edit'),
     url(r'^welder_delete/$', views.welder_delete, name='welder_delete'),
+    url(r'^staff_detail/$', views.staff_detail, name='staff_detail'),
 
 ]

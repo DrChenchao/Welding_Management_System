@@ -91,7 +91,7 @@
         <div class="container" >
 
             <header class="section-header">
-                <h3 class="section-title">焊接保护气</h3>
+                <h3 class="section-title">焊机</h3>
             </header>
 
         </div>
@@ -102,20 +102,26 @@
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <table width="100%" class="table table-striped table-bordered table-hover" id="weldingGas_table">
+                        <table width="100%" class="table table-striped table-bordered table-hover" id="weldingMachine_table">
                             <thead>
                             <tr>
-                                <th>焊气id</th>
+                                <th>焊机id</th>
                                 <th>名称</th>
+                                <th>规格</th>
+                                <th>服务年限</th>
+                                <th>存储时间</th>
                                 <th>价格</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {% for weldingGas in weldingGases %}
+                            {% for weldingmachine in weldingmachines %}
                             <tr>
-                                <td>{{ weldingGas.id }}</td>
-                                <td>{{ weldingGas.name }}</td>
-                                <td>{{ weldingGas.price }}</td>
+                                <td>{{ weldingmachine.id }}</td>
+                                <td>{{ weldingmachine.name }}</td>
+                                <td>{{ weldingmachine.specifications }}</td>
+                                <td>{{ weldingmachine.service_life }}</td>
+                                <td>{{ weldingmachine.storage_time }}</td>
+                                <td>{{ weldingmachine.price }}</td>
                             </tr>
                             {% endfor %}
                             </tbody>
@@ -146,8 +152,8 @@
     <script src="{% static 'js/SM/dataTables.responsive.js' %}"></script>
     <script>
         $(document).ready(function(){
-            var table = $('#weldingGas_table').DataTable();
-            $('#weldingGas_table tbody').on( 'click', 'tr', function () {
+            var table = $('#weldingMachine_table').DataTable();
+            $('#weldingMachine_table tbody').on( 'click', 'tr', function () {
                 if ( $(this).hasClass('selected') ) {
                     $(this).removeClass('selected');
                 }
@@ -162,7 +168,7 @@
                 {
                     if(confirm('确实要删除该内容吗?'))
                     {
-                        $.get("{% url 'Material_Management:delete_welding_gas' %}", {ID: id[0]}, function(){
+                        $.get("{% url 'Material_Management:delete_welding_machine' %}", {ID: id[0]}, function(){
                             table.row('.selected').remove().draw( false );
                             parent.location.reload();
                         })
@@ -179,7 +185,7 @@
                 if (id!=null)
                 {
                     modal.style.display = "block";
-                    $.get("{% url 'Material_Management:edit_welding_gas' 0 %}", {ID: id[0]}, function(data){
+                    $.get("{% url 'Material_Management:edit_welding_machine' 0 %}", {ID: id[0]}, function(data){
                         $("#form").empty();
                         $("#form").html(data);
                     })
@@ -187,7 +193,7 @@
             });
             $("#table_create").click(function(){
                 modal.style.display = "block";
-                $.get("{% url 'Material_Management:create_welding_gas' %}", function(data){
+                $.get("{% url 'Material_Management:create_welding_machine' %}", function(data){
                     $("#form").empty();
                     $("#form").html(data);
                 })
@@ -200,6 +206,12 @@
         });
     </script>
 {% endblock %}
+
+
+
+
+
+
 
 
 

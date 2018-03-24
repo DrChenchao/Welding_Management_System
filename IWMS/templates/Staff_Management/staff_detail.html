@@ -1,0 +1,122 @@
+{% load staticfiles %}
+<style type="text/css">
+    .clear { clear: both; }
+    #page-wrap { width: 800px; margin: 40px auto 60px; }
+    h1 { margin: 0 0 16px 0; padding: 0 0 16px 0; font-size: 42px; font-weight: bold; letter-spacing: -2px; border-bottom: 1px solid #999; }
+    dl {width: 600px;float: left;}
+    #pic { width: 200px;height: 240px;float: right; margin: -70px 50px 0 -50px; }
+    dt { font-style: italic; font-weight: bold; font-size: 18px; text-align: right; padding: 0 26px 0 0; width: 150px; float: left; height: 120px; border-right: 1px solid #999;  }
+    dd { width: 400px; float: right; padding: 0 0px 0 10px}
+    dd.clear { float: none; margin: 0; height: 15px; }
+</style>    
+<div id="page-wrap">
+    <div id="contact-info" class="vcard">
+        <h1 class="fn">姓名:{{ staff.user.username }}</h1>
+    </div>
+    <div class="clear"></div>
+    <dl >
+        <dd class="clear"></dd>
+        <dt>基本信息</dt>
+        <dd>
+            <p>
+                <table>
+                    <tr>
+                        <th>性别:</th>
+                        <td>{{ staff.gender }}</td>
+                    </tr>
+                    <tr>
+                        <th>生日:</th>
+                        <td>{{ staff.birth_date }}</td>
+                    </tr>
+                    <tr>
+                        <th>国籍:</th>
+                        <td>{{ staff.nationality }}</td>
+                    </tr>
+                    <tr>
+                        <th>身份证号:</th>
+                        <td>{{ staff.id_number }}</td>
+                    </tr>
+                </table>
+             </p>
+        </dd>
+        
+        <dd class="clear"></dd>
+        
+        <dt>联系方式</dt>
+        <dd>
+            <p>
+                <table>
+                    
+                    <tr>
+                        <th>邮箱:</th>
+                        <td><a>{{ staff.user.email }}</a></td>
+                    </tr>
+                    <tr>
+                        <th>联系电话:</th>
+                        <td><i>{{ staff.telephone_number }}</i></td>
+                    </tr>
+                    <tr>
+                        <th>工作地址:</th>
+                        <td>{{ staff.working_address }}</td>
+                    </tr>
+                    <tr>
+                        <th>家庭住址:</th>
+                        <td>{{ staff.home_address }}</td>
+                    </tr>
+                </table>
+            </p>
+        </dd>
+        
+        <dd class="clear"></dd>
+        
+        <dt>职务信息</dt>
+        <dd>
+            <p>
+                <table>
+                    <tr>
+                        <th>所属部门:</th>
+                        <td>{{ staff.post.department_id }}</td>
+                    </tr>
+                    <tr>
+                        <th>职位:</th>
+                        <td>{{ staff.post }}</td>
+                    </tr>
+                    <tr>
+                        <th>绩效:</th>
+                        <td>{{ staff.performance }}</td>
+                    </tr>
+                </table>
+            </p>
+        </dd>
+        <dd class="clear"></dd>
+        
+        {% if welder %}
+        <dt>焊工信息</dt>
+        <dd>
+            <p>
+                <table>
+                    <tr>
+                        <th>焊工资质:</th>
+                        <td>{{ welder.qualification }}</td>
+                    </tr>
+                    <tr>
+                        <th>焊工资质到期时间:</th>
+                        <td>{{ welder.expiry_date }}</td>
+                    </tr>
+                    <tr>
+                        <th>焊工资质延期时间:</th>
+                        <td>{{ welder.prolongation_date }}</td>
+                    </tr>
+                </table>
+            </p>
+        </dd>
+        <dd class="clear"></dd>
+        {% endif %}
+    </dl>
+    {% if staff.Photo %}
+    <img src="{{ MEDIA_URL }}{{ staff.Photo }}" alt="{{ staff.user.username }}" id="pic" />
+    {% else %}
+    <img src="{% static 'images/UI/head.jpg' %}" alt="Photo of example" id="pic" />
+    {% endif %}
+    <div class="clear"></div>
+</div>

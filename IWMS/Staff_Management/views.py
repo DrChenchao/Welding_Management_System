@@ -113,6 +113,17 @@ def staff_create_confirm(request):
 	return HttpResponse(None)
 
 @login_required
+def staff_detail(request):
+	staffid = request.GET['staffid']
+	staff = Staff.objects.get(user = User.objects.get(id=staffid))
+	q = Welder.objects.filter(staff = staff)
+	if q.exists():
+		return render(request, 'Staff_Management/staff_detail.html',{'staff': staff, 'welder': q[0]})
+	else:
+		return render(request, 'Staff_Management/staff_detail.html',{'staff': staff})
+
+
+@login_required
 def staff_edit_confirm(request):
 	if request.method == 'GET':
 		staff_ID = request.GET['staff_ID']

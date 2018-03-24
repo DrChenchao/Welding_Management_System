@@ -5,8 +5,10 @@ from django.contrib.auth.decorators import login_required
 from Staff_Management.models import *
 from User_Information.forms import *
 from django.http import HttpResponseRedirect
+import os
+from django.core.files.base import ContentFile
+from IWMS.settings import MEDIA_DIR
 # Create your views here.
-
 @login_required
 def person_center(request):
     pass
@@ -14,13 +16,19 @@ def person_center(request):
 
 @login_required
 def edit_staff(request):
-	staff = Staff.objects.get(user = User.objects.get(id=request.user.id))
+	staff = Staff.objects.get_or_create(user = User.objects.get(id=request.user.id))[0]
+	imagename=str(staff.Photo)
 	form = StaffForm(instance = staff)
-	print("test")
+	#print("test")
 	if request.method == 'POST':
-		form = StaffForm(request.POST, instance = staff)
+		form = StaffForm(request.POST, request.FILES, instance = staff)
 		if form.is_valid():
-			form.save()
+			if 'Photo' in request.FILES:
+				if imagename == None:
+					imagefile = os.path.join(MEDIA_DIR, imagename)
+					# print(imagefile)
+					os.remove(imagefile)
+			form.save(commit=True)
 			return HttpResponseRedirect('User_Information/')
 		else:
 			form = StaffForm(instance = staff)
